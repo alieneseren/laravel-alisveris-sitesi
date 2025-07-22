@@ -50,12 +50,12 @@
 #### 1️⃣ Proje Klonlama
 ```bash
 # Repository'yi klonla
-git clone https://github.com/KULLANICI_ADINIZ/laravel-pazaryeri.git
-cd laravel-pazaryeri
+git clone https://github.com/alieneseren/laravel-alisveris-sitesi.git
+cd laravel-alisveris-sitesi
 
 # veya ZIP indirip çıkart
-# unzip laravel-pazaryeri.zip
-# cd laravel-pazaryeri
+# unzip laravel-alisveris-sitesi.zip
+# cd laravel-alisveris-sitesi
 ```
 
 #### 2️⃣ Bağımlılıkları Yükle
@@ -340,7 +340,7 @@ LOG_LEVEL=debug
 **1. GitHub'da Repository Oluştur:**
 1. [GitHub.com](https://github.com)'a git
 2. "New repository" butonuna tıkla
-3. Repository name: `laravel-pazaryeri`
+3. Repository name: `laravel-alisveris-sitesi`
 4. Description: `Laravel tabanlı multi-vendor e-ticaret platformu`
 5. Public/Private seç
 6. "Create repository" tıkla
@@ -351,7 +351,7 @@ LOG_LEVEL=debug
 git init
 
 # Uzak repository ekle
-git remote add origin https://github.com/KULLANICI_ADINIZ/laravel-pazaryeri.git
+git remote add origin https://github.com/alieneseren/laravel-alisveris-sitesi.git
 
 # Ana branch'i main olarak ayarla
 git branch -M main
@@ -568,7 +568,8 @@ laravel-pazaryeri/
 
 - **Geliştirici:** Ali Enes Eren
 - **E-mail:** alienes.eren3024@gop.edu.tr
-- **GitHub:** [GitHub Profile](https://github.com/KULLANICI_ADINIZ)
+- **GitHub:** [GitHub Profile](https://github.com/alieneseren)
+- **Repository:** [laravel-alisveris-sitesi](https://github.com/alieneseren/laravel-alisveris-sitesi)
 
 
 ---
