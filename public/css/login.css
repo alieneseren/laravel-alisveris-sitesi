@@ -1,0 +1,444 @@
+/* Misafir Giriş Linki */
+.guest-link {
+  text-align: center;
+  margin-top: 1.2rem;
+  color: #666;
+}
+.guest-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.guest-link a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* Modern Alert */
+.modern-alert {
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+}
+.modern-alert.danger {
+  background: #ffe4e6;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+.modern-alert.success {
+  background: #e0f7e9;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+@media (max-width: 700px) {
+  .guest-link {
+    text-align: center !important;
+    margin-top: 1.2rem !important;
+  }
+}
+/* login.css - Modern Login Sayfası Stilleri */
+:root {
+  --primary: #4361ee;
+  --primary-dark: #3a0ca3;
+  --secondary: #7209b7;
+  --accent: #f72585;
+  --dark: #1a1a2e;
+  --light: #f8f9fa;
+  --glass: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Temel Yapı */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Sol Panel - Görsel */
+.login-illustration {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+
+.login-illustration h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-illustration p {
+  font-size: 1.1rem;
+  max-width: 80%;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.illustration-img {
+  width: 70%;
+  max-width: 400px;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Sağ Panel - Form */
+.login-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  transform-style: preserve-3d;
+  transition: var(--transition);
+}
+
+.login-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.login-form h1 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-form p {
+  color: #666;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Form Elemanları */
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: #f9f9f9;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+  outline: none;
+  background-color: white;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+  transition: var(--transition);
+}
+
+.password-toggle:hover {
+  color: var(--primary);
+}
+
+/* Buton */
+.login-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+}
+
+.login-btn:hover::before {
+  left: 100%;
+}
+
+/* Sosyal Giriş */
+.social-login {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #999;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.divider::before {
+  margin-right: 1rem;
+}
+
+.divider::after {
+  margin-left: 1rem;
+}
+
+.social-btns {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.social-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.social-btn.google {
+  color: #DB4437;
+}
+
+.social-btn.facebook {
+  color: #4267B2;
+}
+
+.social-btn.apple {
+  color: #000000;
+}
+
+/* Kayıt Linki */
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+}
+
+.register-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.register-link a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-illustration {
+    display: none;
+  }
+  
+  .login-form-container {
+    padding: 1.5rem;
+  }
+  
+  .login-form {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-form {
+    padding: 1.5rem;
+  }
+  
+  .login-form h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    padding: 1rem;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-illustration {
+    display: none;
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-form {
+    padding: 2rem 1.5rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .login-btn {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    width: 100%;
+  }
+
+  .register-link {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .guest-link {
+    text-align: center;
+  }
+}
+
+/* Ekstra küçük ekranlar için (480px ve altı) */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 0.5rem;
+  }
+
+  .login-form-container {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+
+  .login-form {
+    padding: 1.5rem 1rem;
+    border-radius: 15px;
+  }
+
+  .login-form h1 {
+    font-size: 1.6rem;
+  }
+
+  .form-control {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .login-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}

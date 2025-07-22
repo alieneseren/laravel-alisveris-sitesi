@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .favicon-gen {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            position: relative;
+        }
+        .favicon-gen::before {
+            content: '🛒';
+            font-size: 16px;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+        }
+        .favicon-gen::after {
+            content: 'P';
+            font-size: 14px;
+            position: absolute;
+            bottom: 2px;
+            right: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="favicon-gen"></div>
+    
+    <!-- Bu HTML'i tarayıcıda açıp screenshot alarak favicon oluşturabilirsiniz -->
+    <!-- Veya online favicon generator kullanabilirsiniz -->
+</body>
+</html>

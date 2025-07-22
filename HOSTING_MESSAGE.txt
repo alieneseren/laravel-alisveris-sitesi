@@ -1,0 +1,43 @@
+Subject: Laravel PHP Project Migration - Not WordPress
+
+Dear Support Team,
+
+I need to clarify that this is NOT a WordPress website. This is a **Laravel PHP Framework** project which requires different migration process.
+
+**Project Details:**
+- Framework: Laravel 12.20.0 (PHP Framework)
+- Database: MySQL
+- Type: Custom E-commerce Platform
+- NOT WordPress - NO WordPress migration tools needed
+
+**Migration Requirements:**
+1. PHP 8.1+ support
+2. MySQL database import
+3. Manual file upload to web root
+4. Composer dependencies installation
+5. Laravel-specific configurations
+
+**Files Included:**
+✅ Complete Laravel project files
+✅ Database dump (.sql file)
+✅ Upload folder with all images
+✅ Production configuration files
+✅ Migration instructions (HOSTING_MIGRATION_GUIDE.md)
+
+**What I Need:**
+1. Upload all project files to hosting
+2. Import MySQL database
+3. Configure .env file with hosting details
+4. Set proper folder permissions
+5. Run Laravel optimization commands
+
+This is a custom PHP application, not WordPress. Please use manual migration process instead of WordPress migration tools.
+
+I've included detailed migration instructions in HOSTING_MIGRATION_GUIDE.md file.
+
+Please let me know if you need any clarification about Laravel framework migration.
+
+Thank you for your cooperation.
+
+Best regards,
+[Your Name]
