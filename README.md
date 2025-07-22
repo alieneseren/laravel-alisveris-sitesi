@@ -567,7 +567,8 @@ laravel-pazaryeri/
 ## 📞 Destek & İletişim
 
 - **Geliştirici:** Ali Enes Eren
-- **E-mail:** koers0@outlook.com
+- **E-mail:** alienes.eren3024@gop.edu.tr
+- **GitHub:** [GitHub Profile](https://github.com/KULLANICI_ADINIZ)
 
 
 ---
