@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Kayıt Ol - Pazaryeri</title>
     
     <!-- Favicon ve İkonlar -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="<?php echo e(asset('favicon.ico')); ?>">
+    <link rel="icon" type="image/svg+xml" href="<?php echo e(asset('images/logo.svg')); ?>">
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('favicon.ico')); ?>">
     
-    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('css/login.css')); ?>" rel="stylesheet">
 </head>
 <body>
     <div class="login-container">
@@ -25,26 +25,26 @@
                 <h1>Kayıt Ol</h1>
                 <p>Hesabınızı oluşturun</p>
 
-                @if ($errors->any())
+                <?php if($errors->any()): ?>
                     <div class="modern-alert danger">
-                        @foreach ($errors->all() as $error)
-                            <p>{{ $error }}</p>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <p><?php echo e($error); ?></p>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                <form method="POST" action="{{ route('register.post') }}" id="registerForm">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('register.post')); ?>" id="registerForm">
+                    <?php echo csrf_field(); ?>
                     <div class="form-group">
                         <label for="ad">Ad Soyad</label>
                         <input type="text" class="form-control" id="ad" name="ad" 
-                               value="{{ old('ad') }}" required>
+                               value="<?php echo e(old('ad')); ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="eposta">E-posta</label>
                         <input type="email" class="form-control" id="eposta" name="eposta" 
-                               value="{{ old('eposta') }}" required>
+                               value="<?php echo e(old('eposta')); ?>" required>
                     </div>
 
                     <div class="form-group">
@@ -67,8 +67,8 @@
                         <label for="rol">Hesap Türü</label>
                         <select class="form-control" id="rol" name="rol" required>
                             <option value="">Seçiniz</option>
-                            <option value="musteri" {{ old('rol') == 'musteri' ? 'selected' : '' }}>Müşteri</option>
-                            <option value="satici" {{ old('rol') == 'satici' ? 'selected' : '' }}>Satıcı</option>
+                            <option value="musteri" <?php echo e(old('rol') == 'musteri' ? 'selected' : ''); ?>>Müşteri</option>
+                            <option value="satici" <?php echo e(old('rol') == 'satici' ? 'selected' : ''); ?>>Satıcı</option>
                         </select>
                     </div>
 
@@ -81,11 +81,11 @@
                 </form>
 
                 <div class="register-link">
-                    Zaten hesabınız var mı? <a href="{{ route('login') }}">Giriş Yap</a>
+                    Zaten hesabınız var mı? <a href="<?php echo e(route('login')); ?>">Giriş Yap</a>
                 </div>
 
                 <div class="guest-link">
-                    <a href="{{ route('home') }}">Misafir olarak devam et</a>
+                    <a href="<?php echo e(route('home')); ?>">Misafir olarak devam et</a>
                 </div>
             </div>
         </div>
@@ -122,3 +122,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH C:\Users\Enes\Desktop\kafama göre projeler\laravel-php-pazaryeri\resources\views/auth/register.blade.php ENDPATH**/ ?>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>PayThor Ödeme Sistemi - Örnek Entegrasyon</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <h2><i class="fas fa-credit-card text-primary"></i> PayThor Ödeme Sistemi</h2>
+                    <p class="text-muted">Laravel projeleriniz için hazır ödeme entegrasyonu</p>
+                </div>
+
+                <!-- Ödeme Formu -->
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-lock"></i> Güvenli Ödeme</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Hata mesajları burada görünecek -->
+                        
+                        <form class="payment-form" method="POST" action="/payment/process">
+                            <!-- CSRF Token -->
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="order_id" value="123">
+                            <input type="hidden" name="amount" value="199.99">
+
+                            <!-- Müşteri Bilgileri -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">
+                                            <i class="fas fa-user"></i> Ad Soyad
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="name" 
+                                               name="name" 
+                                               placeholder="Adınız ve soyadınız"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label">
+                                            <i class="fas fa-phone"></i> Telefon
+                                        </label>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               id="phone" 
+                                               name="phone" 
+                                               placeholder="5XX XXX XX XX"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope"></i> E-posta
+                                </label>
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       name="email" 
+                                       placeholder="ornek@email.com"
+                                       required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i> Adres
+                                </label>
+                                <textarea class="form-control" 
+                                          id="address" 
+                                          name="address" 
+                                          rows="3" 
+                                          placeholder="Tam adresinizi giriniz..."
+                                          required></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">
+                                            <i class="fas fa-city"></i> Şehir
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="city" 
+                                               name="city" 
+                                               placeholder="İstanbul"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="tc_no" class="form-label">
+                                            <i class="fas fa-id-card"></i> TC Kimlik No (Opsiyonel)
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="tc_no" 
+                                               name="tc_no" 
+                                               placeholder="12345678901"
+                                               maxlength="11">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sipariş Özeti -->
+                            <div class="payment-summary mb-4">
+                                <h6><i class="fas fa-shopping-bag"></i> Sipariş Özeti</h6>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <span>Ürün Tutarı:</span>
+                                    <span>169.99 TL</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Kargo:</span>
+                                    <span>30.00 TL</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <span>Toplam:</span>
+                                    <span class="text-success">199.99 TL</span>
+                                </div>
+                            </div>
+
+                            <!-- Güvenlik Bilgisi -->
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="fas fa-shield-alt fa-2x me-3"></i>
+                                <div>
+                                    <strong>Güvenli Ödeme</strong><br>
+                                    <small>256-bit SSL sertifikası ile korunan güvenli ödeme altyapısı</small>
+                                </div>
+                            </div>
+
+                            <!-- Kabul Edilen Kartlar -->
+                            <div class="text-center mb-3">
+                                <small class="text-muted">Kabul Edilen Kartlar:</small><br>
+                                <i class="fab fa-cc-visa fa-2x me-2 text-primary"></i>
+                                <i class="fab fa-cc-mastercard fa-2x me-2 text-warning"></i>
+                                <i class="fas fa-credit-card fa-2x me-2 text-info"></i>
+                            </div>
+
+                            <!-- Ödeme Butonu -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-lock"></i> 199.99 TL - Güvenli Ödeme Yap
+                                </button>
+                            </div>
+
+                            <!-- Güvenlik Notları -->
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i>
+                                    Kart bilgileriniz PayThor güvenli ödeme sistemi üzerinden işlenir. 
+                                    Kart bilgileriniz tarafımızda saklanmaz.
+                                </small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Entegrasyon Bilgileri -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h6><i class="fas fa-code"></i> Entegrasyon Bilgileri</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Gerekli Dosyalar:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-file-code text-primary"></i> PaymentController.php</li>
+                                    <li><i class="fas fa-file-code text-success"></i> paythor-payment.js</li>
+                                    <li><i class="fas fa-file-alt text-info"></i> Blade view dosyaları</li>
+                                    <li><i class="fas fa-database text-warning"></i> Migration dosyası</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Özellikler:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Form validasyonu</li>
+                                    <li><i class="fas fa-check text-success"></i> Telefon formatı</li>
+                                    <li><i class="fas fa-check text-success"></i> TC kimlik kontrolü</li>
+                                    <li><i class="fas fa-check text-success"></i> Callback handling</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-light mt-3">
+                            <strong>📋 Kurulum:</strong> 
+                            <code>PayThor_Integration_Package.md</code> dosyasındaki adımları takip edin.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- PayThor Payment JS -->
+    <script src="paythor-payment.js"></script>
+    
+    <!-- Demo için örnek veri doldurma -->
+    <script>
+        // Demo amaçlı otomatik form doldurma (production'da kaldırın)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Demo butonu ekle
+            const demoBtn = document.createElement('button');
+            demoBtn.className = 'btn btn-outline-secondary btn-sm mb-3';
+            demoBtn.innerHTML = '<i class="fas fa-magic"></i> Demo Verilerini Doldur';
+            demoBtn.type = 'button';
+            
+            demoBtn.addEventListener('click', function() {
+                document.getElementById('name').value = 'Ali Enes Eren';
+                document.getElementById('phone').value = '555 123 45 67';
+                document.getElementById('email').value = 'test@example.com';
+                document.getElementById('address').value = 'Örnek Mahallesi, Test Sokak No:1';
+                document.getElementById('city').value = 'İstanbul';
+                document.getElementById('tc_no').value = '12345678901';
+            });
+            
+            const form = document.querySelector('.payment-form');
+            form.insertBefore(demoBtn, form.firstElementChild);
+        });
+    </script>
+</body>
+</html>

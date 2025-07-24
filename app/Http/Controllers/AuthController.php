@@ -75,7 +75,11 @@ class AuthController extends Controller
             'ad' => 'required|string|max:255',
             'eposta' => 'required|email|unique:kullanicis,eposta',
             'sifre' => 'required|min:6|confirmed',
+            'sifre_confirmation' => 'required',
             'rol' => 'required|in:musteri,satici',
+        ], [
+            'sifre.confirmed' => 'Şifreler eşleşmiyor.',
+            'sifre_confirmation.required' => 'Şifre tekrarı zorunludur.',
         ]);
 
         // OTP devre dışı - direkt kullanıcı oluştur

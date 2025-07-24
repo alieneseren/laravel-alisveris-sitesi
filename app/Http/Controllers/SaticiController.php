@@ -141,16 +141,22 @@ class SaticiController extends Controller
         // Görselleri ekle
         $gorselSayisi = 0;
         
+        // gorseller klasörünü oluştur
+        $gorsellerKlasoru = public_path('gorseller');
+        if (!file_exists($gorsellerKlasoru)) {
+            mkdir($gorsellerKlasoru, 0755, true);
+        }
+        
         // Dosya yükleme
         if ($request->hasFile('gorsel_dosyalari')) {
             foreach ($request->file('gorsel_dosyalari') as $dosya) {
                 if ($dosya && $dosya->isValid()) {
                     $dosyaAdi = time() . '_' . $urun->id . '_' . $gorselSayisi . '.' . $dosya->getClientOriginalExtension();
-                    $dosya->storeAs('public/uploads/urunler', $dosyaAdi);
+                    $dosya->move($gorsellerKlasoru, $dosyaAdi);
                     
                     UrunGorseli::create([
                         'urun_id' => $urun->id,
-                        'gorsel_url' => 'storage/uploads/urunler/' . $dosyaAdi,
+                        'gorsel_url' => 'gorseller/' . $dosyaAdi,
                         'ana_gorsel' => $gorselSayisi === 0,
                     ]);
                     $gorselSayisi++;
@@ -256,14 +262,20 @@ class SaticiController extends Controller
         if ($request->hasFile('gorsel_dosyalari')) {
             $mevcutGorselSayisi = $urun->gorseller()->count();
             
+            // gorseller klasörünü oluştur
+            $gorsellerKlasoru = public_path('gorseller');
+            if (!file_exists($gorsellerKlasoru)) {
+                mkdir($gorsellerKlasoru, 0755, true);
+            }
+            
             foreach ($request->file('gorsel_dosyalari') as $index => $dosya) {
                 if ($dosya && $dosya->isValid()) {
                     $dosyaAdi = time() . '_' . $urun->id . '_' . ($mevcutGorselSayisi + $index) . '.' . $dosya->getClientOriginalExtension();
-                    $dosya->move(public_path('uploads/urunler'), $dosyaAdi);
+                    $dosya->move($gorsellerKlasoru, $dosyaAdi);
                     
                     UrunGorseli::create([
                         'urun_id' => $urun->id,
-                        'gorsel_url' => '/uploads/urunler/' . $dosyaAdi,
+                        'gorsel_url' => 'gorseller/' . $dosyaAdi,
                         'ana_gorsel' => $urun->gorseller()->count() === 0 && $index === 0,
                     ]);
                 }
