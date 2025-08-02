@@ -74,19 +74,50 @@
                     </div>
                 </div>
 
-                <a href="<?php echo e(route('sepet')); ?>" class="nav-link">
+                <a href="<?php echo e(route('sepet.index')); ?>" class="nav-link">
                     <i class="fas fa-shopping-cart"></i> Sepet <span id="cart-count" class="cart-count">0</span>
                 </a>
 
                 <?php if(auth()->guard()->check()): ?>
-                    <a href="/profil" class="nav-link">
-                        <i class="fas fa-user"></i> Profil
-                    </a>
-                    <?php if(auth()->user()->rol == 'yonetici'): ?>
-                        <a href="<?php echo e(route('admin.dashboard')); ?>" class="nav-link">
-                            <i class="fas fa-cog"></i> Admin Panel
+                    <div class="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="profilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i> <?php echo e(Session::get('kullanici_adi', auth()->user()->ad)); ?>
+
                         </a>
-                    <?php endif; ?>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profilDropdown">
+                            <li><a class="dropdown-item" href="<?php echo e(route('profil')); ?>">
+                                <i class="fas fa-user"></i> Profilim
+                            </a></li>
+                            <?php if(Session::get('kullanici_rol') === 'musteri'): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('siparislerim')); ?>">
+                                    <i class="fas fa-shopping-bag"></i> Siparişlerim
+                                </a></li>
+                            <?php endif; ?>
+                            <?php if(Session::get('kullanici_rol') === 'satici'): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('satici.siparisler')); ?>">
+                                    <i class="fas fa-shopping-bag"></i> Sipariş Geçmişim
+                                </a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(route('satici.dashboard')); ?>">
+                                    <i class="fas fa-store"></i> Satıcı Paneli
+                                </a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(route('satici.urunler')); ?>">
+                                    <i class="fas fa-box"></i> Ürünlerim
+                                </a></li>
+                            <?php endif; ?>
+                            <?php if(Session::get('kullanici_rol') === 'yonetici'): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('admin.dashboard')); ?>">
+                                    <i class="fas fa-cog"></i> Admin Panel
+                                </a></li>
+                            <?php endif; ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('profil.duzenle')); ?>">
+                                <i class="fas fa-edit"></i> Profili Düzenle
+                            </a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('sifre.degistir')); ?>">
+                                <i class="fas fa-key"></i> Şifre Değiştir
+                            </a></li>
+                        </ul>
+                    </div>
                     <form method="POST" action="<?php echo e(route('logout')); ?>" class="nav-logout">
                         <?php echo csrf_field(); ?>
                         <button type="submit" class="nav-link logout-btn">

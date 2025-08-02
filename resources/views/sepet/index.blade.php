@@ -62,21 +62,6 @@
                 </a>
             </div>
         @else
-            {{-- Müşteri Bilgileri Formu --}}
-            <form id="odeme-bilgileri-form">
-                <h3 class="mb-2" style="font-size:1.15rem;font-weight:600;">Müşteri Bilgileri</h3>
-                <div style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
-                    <input type="text" id="musteri-ad" name="ad" class="form-control" placeholder="Ad" required 
-                           style="min-width:120px;" value="{{ auth()->user()->ad ?? '' }}">
-                    <input type="text" id="musteri-soyad" name="soyad" class="form-control" placeholder="Soyad" required 
-                           style="min-width:120px;" value="{{ auth()->user()->soyad ?? '' }}">
-                    <input type="email" id="musteri-eposta" name="eposta" class="form-control" placeholder="E-posta" required 
-                           style="min-width:180px;" value="{{ auth()->user()->email ?? '' }}">
-                    <input type="text" id="musteri-telefon" name="telefon" class="form-control" placeholder="Telefon" required 
-                           style="min-width:120px;" value="{{ auth()->user()->telefon ?? '' }}">
-                </div>
-            </form>
-
             {{-- Sepet Tablosu --}}
             <table class="modern-table">
                 <thead>
@@ -143,32 +128,79 @@
                 <a href="{{ route('home') }}" class="btn btn-outline-secondary me-2">
                     <i class="fas fa-arrow-left"></i> Alışverişe Devam Et
                 </a>
-                <button id="devam-et-btn" class="btn-main" @if(!$odemeAktif) disabled @endif>
-                    Devam Et
-                </button>
-                <button id="paythor-odeme-btn" class="btn-main" style="display:none;" disabled>
-                    Ödeme Yap
-                </button>
+                @if($odemeAktif)
+                    <div class="btn-group" role="group">
+                        <button id="devam-et-btn" class="btn btn-success me-2">
+                            <i class="fab fa-paypal"></i> PayThor ile Öde
+                        </button>
+                        <a href="{{ route('stripe.checkout.form') }}" class="btn btn-primary">
+                            <i class="fab fa-stripe-s"></i> Stripe ile Öde
+                        </a>
+                    </div>
+                @else
+                    <button class="btn-main" disabled>
+                        Ödeme Sistemi Aktif Değil
+                    </button>
+                @endif
             </div>
 
-            {{-- Adres ve Ek Bilgi Formu (Başta Gizli) --}}
-            <div id="adres-form-kutusu" class="modern-box glassmorphism shadow-lg p-4 mb-4 animate-fade-in" style="display:none;max-width:600px;margin:32px auto 0 auto;">
-                <h3 class="modern-title mb-3">Teslimat ve Fatura Bilgileri</h3>
-                <form id="adres-bilgi-formu">
-                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                        <input type="text" id="adres-adres" name="adres" class="form-control" placeholder="Adres" required style="min-width:220px;flex:1;">
-                        <input type="text" id="adres-il" name="il" class="form-control" placeholder="İl" required style="min-width:120px;">
-                        <input type="text" id="adres-ilce" name="ilce" class="form-control" placeholder="İlçe" required style="min-width:120px;">
-                    </div>
-                    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
-                        <input type="text" id="adres-posta" name="posta_kodu" class="form-control" placeholder="Posta Kodu" style="min-width:100px;">
-                        <input type="text" id="adres-aciklama" name="aciklama" class="form-control" placeholder="Ek Açıklama (isteğe bağlı)" style="min-width:180px;flex:1;">
-                    </div>
-                    <div style="text-align:right;margin-top:18px;">
-                        <button type="button" id="adres-iptal-btn" class="btn-main" style="background:#bbb;color:#222;">İptal</button>
-                        <button type="submit" id="adres-onayla-btn" class="btn-main" style="margin-left:12px;">Onayla ve Ödeme Adımına Geç</button>
-                    </div>
-                </form>
+            <!-- Adres ve Bilgi Formu -->
+            <div id="adres-form-kutusu" style="display: none;">
+                <div class="card">
+                    <form id="paythor-odeme-formu">
+                        <div class="card-body">
+                            <h5 class="mb-3">Müşteri Bilgileri</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="musteri-ad" class="form-label">Ad <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="musteri-ad" name="musteri_ad" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="musteri-soyad" class="form-label">Soyad <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="musteri-soyad" name="musteri_soyad" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="musteri-eposta" class="form-label">E-posta <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="musteri-eposta" name="musteri_eposta" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="musteri-telefon" class="form-label">Telefon <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="musteri-telefon" name="musteri_telefon" required>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mb-3 mt-4">Adres Bilgileri</h5>
+                            <div class="mb-3">
+                                <label for="adres-adres" class="form-label">Adres <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="adres-adres" name="adres" rows="3" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="adres-il" class="form-label">İl <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="adres-il" name="il" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="adres-ilce" class="form-label">İlçe <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="adres-ilce" name="ilce" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="adres-posta" class="form-label">Posta Kodu</label>
+                                    <input type="text" class="form-control" id="adres-posta" name="posta_kodu">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="adres-aciklama" class="form-label">Adres Açıklaması</label>
+                                <input type="text" class="form-control" id="adres-aciklama" name="adres_aciklamasi" placeholder="Örn: Ev, İş, Kapı numarası vb.">
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <button type="button" id="adres-iptal-btn" class="btn btn-secondary">İptal</button>
+                            <button type="submit" class="btn btn-primary">PayThor ile Öde</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         @endif
     </div>
@@ -254,18 +286,16 @@
 var odemeAktif = @json($odemeAktif);
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Adet arttır/azalt
+    // Adet arttır/azalt (değişmedi)
     document.querySelectorAll('.adet-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var urunId = this.getAttribute('data-urun-id');
             var row = this.closest('tr');
             var span = row.querySelector('.adet-value');
             var adet = parseInt(span.textContent);
-            
             if (this.classList.contains('adet-arttir')) {
                 var stok = parseInt(this.getAttribute('data-stok'));
                 var mevcutMiktar = parseInt(this.getAttribute('data-mevcut-miktar'));
-                
                 if (adet >= stok) {
                     alert(`Bu ürünü sepetinize daha fazla ekleyemezsiniz. Stok: ${stok} adet`);
                     return;
@@ -274,9 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (this.classList.contains('adet-azalt')) {
                 adet--;
             }
-            
             if (adet < 1) {
-                // 0 olursa ürünü sepetten kaldır
                 fetch('{{ route("sepet.cikar", ":id") }}'.replace(':id', urunId), {
                     method: 'DELETE',
                     headers: { 
@@ -290,8 +318,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 return;
             }
-            
-            // Adet güncelleme (AJAX ile)
             fetch('{{ route("sepet.adet.guncelle") }}', {
                 method: 'POST',
                 headers: { 
@@ -307,15 +333,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     span.textContent = data.adet;
-                    
-                    // Stok durumuna göre arttır butonunu güncelle
                     var arttirBtn = row.querySelector('.adet-arttir');
                     var stok = parseInt(arttirBtn.getAttribute('data-stok'));
                     arttirBtn.setAttribute('data-mevcut-miktar', data.adet);
-                    
                     if (data.adet >= stok) {
                         arttirBtn.disabled = true;
-                        // Maksimum stok uyarısını göster
                         var uyari = row.querySelector('.text-warning');
                         if (!uyari) {
                             var uyariElement = document.createElement('small');
@@ -325,17 +347,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     } else {
                         arttirBtn.disabled = false;
-                        // Uyarıyı kaldır
                         var uyari = row.querySelector('.text-warning');
                         if (uyari) uyari.remove();
                     }
-                    
-                    // Ara toplam ve genel toplamı güncelle
-                    var araTotalamCell = row.querySelector('td:nth-child(6)'); // 6. kolona güncellendi (stok bilgisi eklendi)
+                    var araTotalamCell = row.querySelector('td:nth-child(6)');
                     if (araTotalamCell) {
                         araTotalamCell.textContent = data.ara_toplam + ' ₺';
                     }
-                    // Genel toplamı güncelle
                     var genelToplamCell = document.querySelector('tfoot strong');
                     if (genelToplamCell) {
                         genelToplamCell.textContent = data.toplam + ' ₺';
@@ -350,18 +368,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Adres/bilgi adımı ve ödeme adımı yönetimi
+    // PayThor ödeme işlemi
     var devamEtBtn = document.getElementById('devam-et-btn');
-    var odemeBtn = document.getElementById('paythor-odeme-btn');
     var adresFormKutusu = document.getElementById('adres-form-kutusu');
-    var adresFormu = document.getElementById('adres-bilgi-formu');
+    var paythorFormu = document.getElementById('paythor-odeme-formu');
     var adresIptalBtn = document.getElementById('adres-iptal-btn');
-    var adresBilgileri = null;
 
     if (devamEtBtn) {
         devamEtBtn.addEventListener('click', function() {
             devamEtBtn.style.display = 'none';
-            if (adresFormKutusu) adresFormKutusu.style.display = 'block';
+            if (adresFormKutusu) {
+                adresFormKutusu.style.display = 'block';
+            }
         });
     }
 
@@ -369,57 +387,54 @@ document.addEventListener('DOMContentLoaded', function() {
         adresIptalBtn.addEventListener('click', function() {
             if (adresFormKutusu) adresFormKutusu.style.display = 'none';
             if (devamEtBtn) devamEtBtn.style.display = '';
-            if (odemeBtn) {
-                odemeBtn.style.display = 'none';
-                odemeBtn.disabled = true;
-            }
         });
     }
 
-    if (adresFormu) {
-        adresFormu.addEventListener('submit', function(e) {
+    if (paythorFormu) {
+        paythorFormu.addEventListener('submit', function(e) {
             e.preventDefault();
-            // Adres bilgilerini topla
-            adresBilgileri = {
-                adres: document.getElementById('adres-adres').value.trim(),
-                il: document.getElementById('adres-il').value.trim(),
-                ilce: document.getElementById('adres-ilce').value.trim(),
-                posta_kodu: document.getElementById('adres-posta').value.trim(),
-                aciklama: document.getElementById('adres-aciklama').value.trim()
-            };
             
-            if (adresFormKutusu) adresFormKutusu.style.display = 'none';
-            if (odemeBtn) {
-                odemeBtn.style.display = '';
-                odemeBtn.disabled = false;
-            }
-        });
-    }
-
-    if (odemeBtn) {
-        odemeBtn.addEventListener('click', function() {
-            odemeBtn.disabled = true;
-            odemeBtn.textContent = 'Yönlendiriliyor...';
-            
-            // Müşteri bilgilerini ve adres bilgilerini topla
+            // Form validasyonu
             var musteriAd = document.getElementById('musteri-ad').value.trim();
             var musteriSoyad = document.getElementById('musteri-soyad').value.trim();
             var musteriEposta = document.getElementById('musteri-eposta').value.trim();
             var musteriTelefon = document.getElementById('musteri-telefon').value.trim();
+            var adres = document.getElementById('adres-adres').value.trim();
+            var il = document.getElementById('adres-il').value.trim();
+            var ilce = document.getElementById('adres-ilce').value.trim();
             
-            // Form oluştur ve gönder
+            if (!musteriAd || !musteriSoyad || !musteriEposta || !musteriTelefon || !adres || !il || !ilce) {
+                alert('Lütfen zorunlu alanları doldurunuz.');
+                return;
+            }
+            
+            // E-posta validasyonu
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(musteriEposta)) {
+                alert('Lütfen geçerli bir e-posta adresi giriniz.');
+                return;
+            }
+            
+            // Adres bilgilerini topla
+            var adresBilgileri = {
+                adres: adres,
+                il: il,
+                ilce: ilce,
+                posta_kodu: document.getElementById('adres-posta').value.trim(),
+                aciklama: document.getElementById('adres-aciklama').value.trim()
+            };
+            
+            // PayThor ile ödeme
             var form = document.createElement('form');
             form.method = 'POST';
-            form.action = '{{ route("sepet.odeme.yap") }}';
-            
-            // CSRF token
+            form.action = '{{ route('sepet.odeme.yap') }}';
             var csrfInput = document.createElement('input');
             csrfInput.type = 'hidden';
             csrfInput.name = '_token';
             csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
             form.appendChild(csrfInput);
             
-            // Müşteri bilgileri
+            // Müşteri bilgilerini ekle
             ['ad_soyad', 'email', 'telefon'].forEach(function(field, index) {
                 var input = document.createElement('input');
                 input.type = 'hidden';
@@ -428,23 +443,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 form.appendChild(input);
             });
             
-            // Adres bilgileri
-            if (adresBilgileri) {
-                Object.keys(adresBilgileri).forEach(function(key) {
-                    var input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = adresBilgileri[key];
-                    form.appendChild(input);
-                });
-            }
+            // Adres bilgilerini ekle
+            Object.keys(adresBilgileri).forEach(function(key) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = adresBilgileri[key];
+                form.appendChild(input);
+            });
             
             document.body.appendChild(form);
             form.submit();
         });
     }
 
-    // - butonunda çöp kutusu hover
+    // - butonunda çöp kutusu hover (değişmedi)
     document.querySelectorAll('.adet-azalt').forEach(function(btn) {
         btn.addEventListener('mouseenter', function() {
             var row = this.closest('tr');
@@ -455,7 +468,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.querySelector('.azalt-ikon').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 6V4C7 2.89543 7.89543 2 9 2H15C16.1046 2 17 2.89543 17 4V6M4 6H20M19 6V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V6H19Z" stroke="#fff" stroke-width="2"/><path d="M10 11V17" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M14 11V17" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
             }
         });
-        
         btn.addEventListener('mouseleave', function() {
             var row = this.closest('tr');
             var span = row.querySelector('.adet-value');

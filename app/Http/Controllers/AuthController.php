@@ -137,7 +137,7 @@ class AuthController extends Controller
         }
         
         // Gizli kod kontrolü (environment'den al)
-        $requiredCode = env('ADMIN_SECRET_CODE', 'ADMIN2025');
+        $requiredCode = env('ADMIN_SECRET_CODE', 'default_admin_code');
         if ($request->secret_code !== $requiredCode) {
             return back()->withErrors(['secret_code' => 'Gizli kod hatalı!']);
         }
@@ -259,6 +259,46 @@ class AuthController extends Controller
         Auth::logout();
         Session::flush();
         return redirect()->route('home');
+    }
+
+    /**
+     * Profil sayfasını göster
+     */
+    public function profil()
+    {
+        $kullanici = Auth::user();
+        
+        // İstatistikleri hesapla
+        $stats = [];
+        
+        if (Session::get('kullanici_rol') === 'musteri') {
+            // Müşteri istatistikleri
+            $stats['toplam_siparis'] = Siparis::where('kullanici_id', $kullanici->id)->count();
+            $stats['toplam_harcama'] = Siparis::where('kullanici_id', $kullanici->id)
+                ->where('durum', '!=', 'iptal')
+                ->sum('toplam_tutar');
+            $stats['sepetdeki_urun'] = Sepet::where('kullanici_id', $kullanici->id)->sum('miktar');
+            
+            // Son siparişler
+            $son_siparisler = Siparis::with(['siparisUrunleri.urun'])
+                ->where('kullanici_id', $kullanici->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(3)
+                ->get();
+            $stats['son_siparisler'] = $son_siparisler;
+        }
+        
+        if (Session::get('kullanici_rol') === 'satici') {
+            // Satıcı istatistikleri - mağaza ID'sini bul
+            $magaza = \App\Models\Magaza::where('kullanici_id', $kullanici->id)->first();
+            if ($magaza) {
+                $stats['aktif_urun'] = \App\Models\Urun::where('magaza_id', $magaza->id)->count();
+                $stats['toplam_satis'] = 0; // Bu hesaplanabilir
+                $stats['bekleyen_siparis'] = 0; // Bu hesaplanabilir
+            }
+        }
+        
+        return view('profil', compact('kullanici', 'stats'));
     }
 
     public function profilDuzenle()

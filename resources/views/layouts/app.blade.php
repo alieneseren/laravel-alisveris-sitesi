@@ -74,19 +74,49 @@
                     </div>
                 </div>
 
-                <a href="{{ route('sepet') }}" class="nav-link">
+                <a href="{{ route('sepet.index') }}" class="nav-link">
                     <i class="fas fa-shopping-cart"></i> Sepet <span id="cart-count" class="cart-count">0</span>
                 </a>
 
                 @auth
-                    <a href="/profil" class="nav-link">
-                        <i class="fas fa-user"></i> Profil
-                    </a>
-                    @if(auth()->user()->rol == 'yonetici')
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link">
-                            <i class="fas fa-cog"></i> Admin Panel
+                    <div class="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="profilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i> {{ Session::get('kullanici_adi', auth()->user()->ad) }}
                         </a>
-                    @endif
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profilDropdown">
+                            <li><a class="dropdown-item" href="{{ route('profil') }}">
+                                <i class="fas fa-user"></i> Profilim
+                            </a></li>
+                            @if(Session::get('kullanici_rol') === 'musteri')
+                                <li><a class="dropdown-item" href="{{ route('siparislerim') }}">
+                                    <i class="fas fa-shopping-bag"></i> Siparişlerim
+                                </a></li>
+                            @endif
+                            @if(Session::get('kullanici_rol') === 'satici')
+                                <li><a class="dropdown-item" href="{{ route('satici.siparisler') }}">
+                                    <i class="fas fa-shopping-bag"></i> Sipariş Geçmişim
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ route('satici.dashboard') }}">
+                                    <i class="fas fa-store"></i> Satıcı Paneli
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ route('satici.urunler') }}">
+                                    <i class="fas fa-box"></i> Ürünlerim
+                                </a></li>
+                            @endif
+                            @if(Session::get('kullanici_rol') === 'yonetici')
+                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                    <i class="fas fa-cog"></i> Admin Panel
+                                </a></li>
+                            @endif
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('profil.duzenle') }}">
+                                <i class="fas fa-edit"></i> Profili Düzenle
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('sifre.degistir') }}">
+                                <i class="fas fa-key"></i> Şifre Değiştir
+                            </a></li>
+                        </ul>
+                    </div>
                     <form method="POST" action="{{ route('logout') }}" class="nav-logout">
                         @csrf
                         <button type="submit" class="nav-link logout-btn">

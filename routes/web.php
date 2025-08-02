@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -44,7 +45,7 @@ Route::middleware(['throttle:5,1'])->group(function () {
 Route::match(['GET', 'POST'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Sepet routes (misafir kullanıcılar da erişebilir)
-Route::get('/sepet', [SepetController::class, 'index'])->name('sepet');
+Route::get('/sepet', [SepetController::class, 'index'])->name('sepet.index');
 Route::post('/sepet/ekle', [SepetController::class, 'ekle'])->name('sepet.ekle');
 Route::delete('/sepet/{id}', [SepetController::class, 'cikar'])->name('sepet.cikar');
 Route::post('/sepet/adet-guncelle', [SepetController::class, 'adetGuncelle'])->name('sepet.adet.guncelle');
@@ -56,17 +57,20 @@ Route::get('/odeme/basarili', [SepetController::class, 'odemeBasarili'])->name('
 Route::get('/odeme/basarisiz', [SepetController::class, 'odemeBasarisiz'])->name('odeme.basarisiz');
 Route::post('/paythor/callback', [SepetController::class, 'paythorCallback'])->name('paythor.callback');
 
-// PayThor callback ve ödeme sonuç sayfaları
-Route::post('/paythor/callback', [SepetController::class, 'paythorCallback'])->name('paythor.callback');
-Route::get('/odeme/basarili', [SepetController::class, 'odemeBasarili'])->name('odeme.basarili');
-Route::get('/odeme/basarisiz', [SepetController::class, 'odemeBasarisiz'])->name('odeme.basarisiz');
+// Stripe ödeme routes
+Route::get('/stripe/checkout', [SepetController::class, 'stripeCheckout'])->name('stripe.checkout.form');
+Route::post('/stripe/address/save', [\App\Http\Controllers\StripeController::class, 'saveAddress'])->name('stripe.address.save');
+Route::post('/stripe/checkout', [\App\Http\Controllers\StripeController::class, 'checkout'])->name('stripe.checkout');
+Route::post('/stripe/create-payment-intent', [\App\Http\Controllers\StripeController::class, 'createPaymentIntent'])->name('stripe.create.payment.intent');
+Route::post('/stripe/create-order', [\App\Http\Controllers\StripeController::class, 'createOrder'])->name('stripe.create.order');
+Route::get('/stripe/success', [\App\Http\Controllers\StripeController::class, 'success'])->name('stripe.success');
+Route::get('/stripe/cancel', [\App\Http\Controllers\StripeController::class, 'cancel'])->name('stripe.cancel');
+Route::post('/stripe/webhook', [\App\Http\Controllers\StripeController::class, 'webhook'])->name('stripe.webhook');
 
 // Korumalı routes
 Route::middleware(['auth'])->group(function () {
     // Profil routes
-    Route::get('/profil', function() {
-        return view('profil');
-    })->name('profil');
+    Route::get('/profil', [AuthController::class, 'profil'])->name('profil');
     Route::get('/profil/duzenle', [AuthController::class, 'profilDuzenle'])->name('profil.duzenle');
     Route::put('/profil/duzenle', [AuthController::class, 'profilDuzenlePost'])->name('profil.duzenle.post');
     Route::get('/sifre-degistir', [AuthController::class, 'sifreDegistir'])->name('sifre.degistir');
@@ -110,5 +114,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/urun/{id}/duzenle', [SaticiController::class, 'urunDuzenle'])->name('satici.urun.duzenle');
         Route::put('/urun/{id}/duzenle', [SaticiController::class, 'urunDuzenlePost'])->name('satici.urun.duzenle.post');
         Route::delete('/urun/{id}/sil', [SaticiController::class, 'urunSil'])->name('satici.urun.sil');
+        Route::get('/siparisler', [SaticiController::class, 'siparisler'])->name('satici.siparisler');
     });
 });

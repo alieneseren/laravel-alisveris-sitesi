@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -16,20 +15,20 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Mail\SiparisOnayMail;
 
+
+
 class SepetController extends Controller
 {
     /**
-     * Admin kullanıcısının Paythor token'ını al
+     * Admin kullanıcısının Paythor token'ını alır
      */
     private function getAdminPaythorToken()
     {
         // Admin kullanıcısını bul (rol = 'yonetici')
-        $admin = Kullanici::where('rol', 'yonetici')->first();
-        
+        $admin = \App\Models\Kullanici::where('rol', 'yonetici')->first();
         if ($admin && $admin->paythor_token) {
             return $admin->paythor_token;
         }
-        
         // Geriye uyumluluk için session'ı da kontrol et
         return session('paythor_token');
     }
@@ -785,5 +784,63 @@ class SepetController extends Controller
         }
         
         return view('odeme.basarisiz', compact('siparis'));
+    }
+
+    /**
+     * Stripe checkout form sayfası
+     */
+    public function stripeCheckout()
+    {
+        // Login kontrolü
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Ödeme yapabilmek için giriş yapmalısınız.');
+        }
+
+        // Sepet verilerini al (index() metodundaki ile aynı mantık)
+        $sepetUranlari = [];
+        $toplam = 0;
+
+        if (auth()->check()) {
+            // Giriş yapmış kullanıcı için veritabanından sepeti al
+            $sepetItems = Sepet::with(['urun.magaza'])
+                ->where('kullanici_id', auth()->id())
+                ->get();
+
+            foreach ($sepetItems as $item) {
+                if ($item->urun) {
+                    $sepetUranlari[] = [
+                        'urun' => $item->urun,
+                        'miktar' => $item->miktar,
+                        'ara_toplam' => $item->urun->fiyat * $item->miktar
+                    ];
+                    $toplam += $item->urun->fiyat * $item->miktar;
+                }
+            }
+        } else {
+            // Misafir kullanıcı için session'dan sepeti al
+            $sepet = Session::get('sepet', []);
+            foreach ($sepet as $urunId => $miktar) {
+                $urun = Urun::with('magaza')->find($urunId);
+                if ($urun) {
+                    $sepetUranlari[] = [
+                        'urun' => $urun,
+                        'miktar' => $miktar,
+                        'ara_toplam' => $urun->fiyat * $miktar
+                    ];
+                    $toplam += $urun->fiyat * $miktar;
+                }
+            }
+        }
+
+        // Sepet kontrolü
+        if (empty($sepetUranlari)) {
+            return redirect()->route('sepet.index')->with('error', 'Sepetinizde geçerli ürün bulunmuyor.');
+        }
+
+        // Adres sayfasına yönlendir
+        return view('stripe.address', [
+            'sepetUranlari' => $sepetUranlari,
+            'toplam' => $toplam
+        ]);
     }
 }

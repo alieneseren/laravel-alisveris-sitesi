@@ -121,11 +121,11 @@
                     </div>
                     <div class="card-body">
                         <div class="d-grid gap-2">
+                            <a href="{{ route('satici.siparisler') }}" class="btn btn-primary">
+                                <i class="fas fa-shopping-bag"></i> Sipariş Geçmişim
+                            </a>
                             <a href="#" class="btn btn-outline-info">
                                 <i class="fas fa-chart-line"></i> Satış Analizi
-                            </a>
-                            <a href="#" class="btn btn-outline-warning">
-                                <i class="fas fa-shopping-cart"></i> Siparişleri Görüntüle
                             </a>
                         </div>
                     </div>

@@ -105,7 +105,7 @@ MAIL_FROM_ADDRESS=your_email@gmail.com
 MAIL_FROM_NAME="Pazaryeri"
 
 # Admin Güvenlik
-ADMIN_SECRET_CODE=ADMIN2025_SUPER_SECRET_KEY_2025
+ADMIN_SECRET_CODE=your_admin_secret_code_here
 ```
 
 #### 5️⃣ Veritabanı Kurulumu
@@ -274,7 +274,7 @@ php artisan tinker
 
 **Admin Hesabı Oluşturma:**
 1. `http://localhost:8000/admin/register` adresine git
-2. Gizli kod: `ADMIN2025_SUPER_SECRET_KEY_2025`
+2. Gizli kod: `.env` dosyasında belirlediğiniz `ADMIN_SECRET_CODE` değeri
 3. Admin bilgilerini gir ve kayıt ol
 
 **Normal Kullanıcı:**

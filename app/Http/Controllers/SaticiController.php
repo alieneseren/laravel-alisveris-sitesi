@@ -138,22 +138,23 @@ class SaticiController extends Controller
         // Kategorileri ekle
         $urun->kategoriler()->attach($secilenKategoriler);
 
+
         // Görselleri ekle
         $gorselSayisi = 0;
-        
+
         // gorseller klasörünü oluştur
         $gorsellerKlasoru = public_path('gorseller');
         if (!file_exists($gorsellerKlasoru)) {
             mkdir($gorsellerKlasoru, 0755, true);
         }
-        
+
         // Dosya yükleme
         if ($request->hasFile('gorsel_dosyalari')) {
             foreach ($request->file('gorsel_dosyalari') as $dosya) {
                 if ($dosya && $dosya->isValid()) {
                     $dosyaAdi = time() . '_' . $urun->id . '_' . $gorselSayisi . '.' . $dosya->getClientOriginalExtension();
                     $dosya->move($gorsellerKlasoru, $dosyaAdi);
-                    
+
                     UrunGorseli::create([
                         'urun_id' => $urun->id,
                         'gorsel_url' => 'gorseller/' . $dosyaAdi,
@@ -163,7 +164,7 @@ class SaticiController extends Controller
                 }
             }
         }
-        
+
         // URL ile görsel ekleme
         if ($request->gorsel_urls) {
             $urls = explode("\n", trim($request->gorsel_urls));
@@ -173,13 +174,14 @@ class SaticiController extends Controller
                     UrunGorseli::create([
                         'urun_id' => $urun->id,
                         'gorsel_url' => $url,
+                        // Sadece hiç dosya yüklenmediyse ve ilk URL ise ana görsel yap
                         'ana_gorsel' => $gorselSayisi === 0,
                     ]);
                     $gorselSayisi++;
                 }
             }
         }
-        
+
         // Hiç görsel yoksa default görsel ekle
         if ($gorselSayisi === 0) {
             UrunGorseli::create([
@@ -306,5 +308,28 @@ class SaticiController extends Controller
         $urun->delete();
 
         return redirect()->route('satici.urunler')->with('success', 'Ürün başarıyla silindi!');
+    }
+
+    /**
+     * Satıcının siparişlerini listele
+     */
+    public function siparisler()
+    {
+        $kullaniciId = Session::get('kullanici_id');
+        $magaza = Magaza::where('kullanici_id', $kullaniciId)->first();
+        
+        if (!$magaza) {
+            return redirect()->route('satici.magaza.olustur')->with('error', 'Önce mağaza oluşturmalısınız!');
+        }
+
+        // Mağazadaki ürünlerin sipariş edildiği siparişleri getir
+        $siparisler = \App\Models\Siparis::with(['siparisUrunleri.urun', 'kullanici'])
+            ->whereHas('siparisUrunleri.urun', function($query) use ($magaza) {
+                $query->where('magaza_id', $magaza->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        return view('satici.siparisler', compact('siparisler', 'magaza'));
     }
 }
